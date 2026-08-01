@@ -4,7 +4,7 @@ An advanced Reinforcement Learning (RL) framework that learns to segment tumors,
 
 ---
 
-## 🌟 Project Overview
+## Project Overview
 Standard deep learning segmentation methods (like U-Net) predict masks pixel-by-pixel, ignoring structural relationships and requiring massive labeled datasets. 
 
 This project implements a hybrid **GNN + RL** framework:
@@ -14,7 +14,7 @@ This project implements a hybrid **GNN + RL** framework:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 ```directory
 grl-med-seg/
 ├── baselines/            # Baseline models (e.g., Random RL, standard U-Net)
@@ -34,7 +34,7 @@ grl-med-seg/
 
 ---
 
-## 📅 13-Week Detailed Implementation Roadmap
+## 13-Week Detailed Implementation Roadmap
 This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year Major Project**. It emphasizes software engineering best practices, rigorous machine learning evaluation, and system design—critical points for AI/ML placement preparation.
 
 ### Phase 1: Foundation, Data Pipeline & EDA (Weeks 1–3)
@@ -97,11 +97,3 @@ This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year 
   - Write a high-quality README summary showing system architecture diagrams.
   - Document performance metrics, sample segmentations, and hyperparameter results.
   - Compile the final report for the 4-credit academic submission and record a 2-minute video demo for LinkedIn/GitHub.
-
----
-
-## 🚀 Key Placement-Ready Highlights (Resume Points)
-* **Hybrid AI Architecture**: Combines state-of-the-art **Geometric Deep Learning (GNNs)** with **Reinforcement Learning** for dynamic decision-making.
-* **Advanced Medical AI**: Works with complex 3D medical image volumes (DICOM/NIfTI formats).
-* **System Design & Software Engineering**: Built using modular design principles, custom Gymnasium environments, OOP design patterns, and unit-tested components.
-* **M.L.Ops Integration**: Incorporates automated logging with weights & biases (`wandb`) and interactive interface deployment.
