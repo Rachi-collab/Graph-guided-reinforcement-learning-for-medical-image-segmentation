@@ -35,7 +35,6 @@ grl-med-seg/
 ---
 
 ## 13-Week Detailed Implementation Roadmap
-This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year Major Project**. It emphasizes software engineering best practices, rigorous machine learning evaluation, and system design—critical points for AI/ML placement preparation.
 
 ### Phase 1: Foundation, Data Pipeline & EDA (Weeks 1–3)
 *Focus: Medical data handling, preprocessing, and building the graph representation.*
