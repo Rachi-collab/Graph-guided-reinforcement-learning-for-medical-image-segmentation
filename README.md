@@ -4,7 +4,7 @@ An advanced Reinforcement Learning (RL) framework that learns to segment tumors,
 
 ---
 
-## 🌟 Project Overview
+## Project Overview
 Standard deep learning segmentation methods (like U-Net) predict masks pixel-by-pixel, ignoring structural relationships and requiring massive labeled datasets. 
 
 This project implements a hybrid **GNN + RL** framework:
@@ -14,7 +14,7 @@ This project implements a hybrid **GNN + RL** framework:
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 ```directory
 grl-med-seg/
 ├── baselines/            # Baseline models (e.g., Random RL, standard U-Net)
@@ -34,7 +34,7 @@ grl-med-seg/
 
 ---
 
-## 📅 13-Week Detailed Implementation Roadmap
+## 13-Week Detailed Implementation Roadmap
 This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year Major Project**. It emphasizes software engineering best practices, rigorous machine learning evaluation, and system design—critical points for AI/ML placement preparation.
 
 ### Phase 1: Foundation, Data Pipeline & EDA (Weeks 1–3)
