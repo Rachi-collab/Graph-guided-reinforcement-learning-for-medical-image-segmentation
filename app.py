@@ -301,28 +301,28 @@ with tab_demo:
 
             with cols[0]:
                 st.caption("📷 Original")
-                st.image((img_np * 255).astype(np.uint8), use_container_width=True)
+                st.image((img_np * 255).astype(np.uint8), use_column_width=True)
 
             with cols[1]:
                 st.caption("🔷 Superpixel Graph")
                 sp_img = mark_boundaries(img_np, g["seg"], color=(0.1, 0.6, 1.0), mode="thick")
-                st.image((sp_img * 255).astype(np.uint8), use_container_width=True)
+                st.image((sp_img * 255).astype(np.uint8), use_column_width=True)
 
             if has_gt:
                 with cols[2]:
                     st.caption("✅ Ground Truth")
                     gt_rgb = np.stack([mask_np, mask_np, mask_np], -1).astype(np.float32)
-                    st.image((gt_rgb * 255).astype(np.uint8), use_container_width=True)
+                    st.image((gt_rgb * 255).astype(np.uint8), use_column_width=True)
 
                 with cols[3]:
                     st.caption("🎯 Prediction (G=TP R=FP B=FN)")
                     overlay = overlay_tp_fp_fn(img_np, pred_mask, mask_np)
-                    st.image((overlay * 255).astype(np.uint8), use_container_width=True)
+                    st.image((overlay * 255).astype(np.uint8), use_column_width=True)
             else:
                 with cols[2]:
                     st.caption("🎯 Prediction Overlay")
                     overlay = overlay_pred(img_np, pred_mask)
-                    st.image((overlay * 255).astype(np.uint8), use_container_width=True)
+                    st.image((overlay * 255).astype(np.uint8), use_column_width=True)
 
             # Confidence heatmap
             if show_confidence:
@@ -458,13 +458,13 @@ with tab_results:
         with fig_col1:
             if os.path.isfile(pred_png):
                 st.subheader("Sample Predictions")
-                st.image(pred_png, use_container_width=True)
+                st.image(pred_png, use_column_width=True)
             else:
                 st.warning("predictions.png not found")
         with fig_col2:
             if os.path.isfile(curves_png):
                 st.subheader("Training Curves")
-                st.image(curves_png, use_container_width=True)
+                st.image(curves_png, use_column_width=True)
             else:
                 st.warning("curves.png not found")
 

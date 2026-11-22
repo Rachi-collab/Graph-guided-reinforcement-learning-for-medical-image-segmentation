@@ -1,5 +1,15 @@
 # Graph-Guided Reinforcement Learning (GRL) for Medical Image Segmentation
 
+## Run the demo
+
+Use the project virtual environment:
+
+```powershell
+.\venv\Scripts\python.exe -m streamlit run app.py --server.address localhost --server.port 8501
+```
+
+Then open `http://localhost:8501`. Upload a 2D image to run inference with `runs/smoke/best.pt`.
+
 An advanced Reinforcement Learning (RL) framework that learns to segment tumors, organs, and lesions in medical scans (e.g., MRI/CT) using a Graph Neural Network (GNN) anatomical representation. This approach eliminates the dependency on dense manual pixel-level annotation during inference by formulating segmentation as an interactive graph traversal problem.
 
 ---
