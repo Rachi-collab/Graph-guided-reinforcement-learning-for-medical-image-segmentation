@@ -1,0 +1,22 @@
+{
+  "data": "synthetic",
+  "data_dir": null,
+  "val_frac": 0.2,
+  "n_train": 200,
+  "n_val": 40,
+  "size": 128,
+  "n_segments": 64,
+  "compactness": 0.3,
+  "hidden": 64,
+  "layers": 3,
+  "iters": 100,
+  "num_envs": 16,
+  "lr": 0.0003,
+  "epochs": 4,
+  "minibatch": 128,
+  "ent_coef": 0.01,
+  "eval_every": 10,
+  "seed": 0,
+  "device": "auto",
+  "out": "runs/smoke"
+}

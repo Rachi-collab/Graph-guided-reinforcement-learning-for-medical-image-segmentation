@@ -1,5 +1,15 @@
 # Graph-Guided Reinforcement Learning (GRL) for Medical Image Segmentation
 
+## Run the demo
+
+Use the project virtual environment:
+
+```powershell
+.\venv\Scripts\python.exe -m streamlit run app.py --server.address localhost --server.port 8501
+```
+
+Then open `http://localhost:8501`. Upload a 2D image to run inference with `runs/smoke/best.pt`.
+
 An advanced Reinforcement Learning (RL) framework that learns to segment tumors, organs, and lesions in medical scans (e.g., MRI/CT) using a Graph Neural Network (GNN) anatomical representation. This approach eliminates the dependency on dense manual pixel-level annotation during inference by formulating segmentation as an interactive graph traversal problem.
 
 ---
@@ -35,7 +45,6 @@ grl-med-seg/
 ---
 
 ## 13-Week Detailed Implementation Roadmap
-This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year Major Project**. It emphasizes software engineering best practices, rigorous machine learning evaluation, and system design—critical points for AI/ML placement preparation.
 
 ### Phase 1: Foundation, Data Pipeline & EDA (Weeks 1–3)
 *Focus: Medical data handling, preprocessing, and building the graph representation.*
@@ -97,11 +106,3 @@ This roadmap is structured to fulfill a **4-credit CSE BTech (AI/ML) Final Year 
   - Write a high-quality README summary showing system architecture diagrams.
   - Document performance metrics, sample segmentations, and hyperparameter results.
   - Compile the final report for the 4-credit academic submission and record a 2-minute video demo for LinkedIn/GitHub.
-
----
-
-## 🚀 Key Placement-Ready Highlights (Resume Points)
-* **Hybrid AI Architecture**: Combines state-of-the-art **Geometric Deep Learning (GNNs)** with **Reinforcement Learning** for dynamic decision-making.
-* **Advanced Medical AI**: Works with complex 3D medical image volumes (DICOM/NIfTI formats).
-* **System Design & Software Engineering**: Built using modular design principles, custom Gymnasium environments, OOP design patterns, and unit-tested components.
-* **M.L.Ops Integration**: Incorporates automated logging with weights & biases (`wandb`) and interactive interface deployment.
