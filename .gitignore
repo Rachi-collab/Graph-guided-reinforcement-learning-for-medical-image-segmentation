@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Runs / checkpoints (keep only small demo checkpoint)
+runs/smoke_probe/
+runs/*/last.pt
+runs/*/log.csv
+
+# Keep the demo checkpoint and outputs
+!runs/smoke/best.pt
+!runs/smoke/metrics.json
+!runs/smoke/curves.png
+!runs/smoke/predictions.png
+!runs/smoke/args.json
+
+# Large generated figures (too big for git)
+runs/smoke/final_figures/
+
+# Datasets
+dataset/
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
