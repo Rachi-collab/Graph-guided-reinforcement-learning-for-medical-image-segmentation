@@ -42,6 +42,10 @@ def parse():
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--device", default="auto")
     p.add_argument("--out", default="runs/exp1")
+    p.add_argument("--pretrain", default=None,
+                   help="checkpoint to warm-start from (transfer learning)")
+    p.add_argument("--augment", action="store_true",
+                   help="apply flip + brightness/contrast jitter to training images")
     return p.parse_args()
 
 
@@ -56,13 +60,23 @@ def main():
     print(f"oracle superpixel Dice (upper bound): train {oracle_dice(train_g):.3f} | val {oracle_dice(val_g):.3f}")
 
     model = GraphActorCritic(NODE_FEAT_DIM + 3, args.hidden, args.layers).to(device)
+
+    # ---- Transfer learning: warm-start from an existing checkpoint ----
+    if args.pretrain is not None:
+        ck = torch.load(args.pretrain, map_location=device, weights_only=False)
+        try:
+            model.load_state_dict(ck["model"], strict=False)
+            print(f"Warm-started from {args.pretrain} (strict=False — mismatched layers skipped)")
+        except Exception as e:
+            print(f"Warning: could not load pretrain weights fully: {e}")
+
     cfg = PPOConfig(lr=args.lr, epochs=args.epochs, minibatch=args.minibatch, ent_coef=args.ent_coef)
     opt = torch.optim.Adam(model.parameters(), lr=cfg.lr)
     log = CSVLogger(os.path.join(args.out, "log.csv"))
     json.dump(vars(args), open(os.path.join(args.out, "args.json"), "w"), indent=2)
 
     r0 = evaluate_policy(model, val_g, device)
-    print(f"untrained policy val Dice: {r0['dice']:.3f}")
+    print(f"{'pretrained' if args.pretrain else 'untrained'} policy val Dice: {r0['dice']:.3f}")
 
     rng = np.random.default_rng(args.seed)
     best, t0 = -1.0, time.time()
