@@ -14,7 +14,7 @@ import torch
 
 from gseg.data import get_graphs
 from gseg.env import BatchedSegEnv
-from gseg.graph import NODE_FEAT_DIM
+from gseg.graph import NODE_FEAT_DIM, NODE_FEAT_DIM_CNN
 from gseg.model import GraphActorCritic
 from gseg.ppo import PPOConfig, collect_rollout, evaluate_policy, oracle_dice, ppo_update
 from gseg.utils import CSVLogger, pick_device, set_seed
@@ -46,6 +46,12 @@ def parse():
                    help="checkpoint to warm-start from (transfer learning)")
     p.add_argument("--augment", action="store_true",
                    help="apply flip + brightness/contrast jitter to training images")
+    p.add_argument("--use_gat", action="store_true",
+                   help="use multi-head Graph Attention layers instead of GraphLayer")
+    p.add_argument("--gat_heads", type=int, default=4,
+                   help="number of attention heads (only used with --use_gat)")
+    p.add_argument("--cnn_features", action="store_true",
+                   help="append pretrained ResNet-18 (layer2) features to node vectors")
     return p.parse_args()
 
 
