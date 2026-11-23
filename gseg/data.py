@@ -80,9 +80,28 @@ def load_folder(root: str, size: int = 128):
     return pairs
 
 
-def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True):
+def augment(img: np.ndarray, mask: np.ndarray, rng: np.random.Generator):
+    """Light augmentation: horizontal/vertical flip + brightness/contrast jitter.
+    Applied only to training pairs; val pairs are never augmented."""
+    # Random horizontal flip
+    if rng.random() < 0.5:
+        img, mask = img[:, ::-1].copy(), mask[:, ::-1].copy()
+    # Random vertical flip
+    if rng.random() < 0.5:
+        img, mask = img[::-1].copy(), mask[::-1].copy()
+    # Brightness jitter ±15 %
+    img = np.clip(img * rng.uniform(0.85, 1.15), 0, 1).astype(np.float32)
+    # Contrast jitter: scale around mean
+    m = img.mean()
+    img = np.clip((img - m) * rng.uniform(0.85, 1.15) + m, 0, 1).astype(np.float32)
+    return img, mask
+
+
+def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True, augment_fn=None, rng=None):
     graphs = []
     for i, (img, mask) in enumerate(pairs):
+        if augment_fn is not None and rng is not None:
+            img, mask = augment_fn(img, mask, rng)
         graphs.append(build_graph(img, mask, n_segments, compactness))
         if verbose and (i + 1) % 100 == 0:
             print(f"  built {i + 1}/{len(pairs)} graphs")
@@ -91,6 +110,7 @@ def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True):
 
 def get_graphs(args):
     """Returns (train_graphs, val_graphs) according to the CLI args."""
+    aug = getattr(args, "augment", False)
     if args.data == "synthetic":
         tr = make_synthetic(args.n_train, args.size, seed=args.seed)
         va = make_synthetic(args.n_val, args.size, seed=10_000 + args.seed)
@@ -102,7 +122,9 @@ def get_graphs(args):
         va = [pairs[i] for i in idx[:n_val]]
         tr = [pairs[i] for i in idx[n_val:]]
     print(f"Building superpixel graphs: {len(tr)} train / {len(va)} val ...")
+    aug_rng = np.random.default_rng(args.seed + 1) if aug else None
     return (
-        build_graphs(tr, args.n_segments, args.compactness),
-        build_graphs(va, args.n_segments, args.compactness),
+        build_graphs(tr, args.n_segments, args.compactness,
+                     augment_fn=augment if aug else None, rng=aug_rng),
+        build_graphs(va, args.n_segments, args.compactness),  # val: no augmentation
     )

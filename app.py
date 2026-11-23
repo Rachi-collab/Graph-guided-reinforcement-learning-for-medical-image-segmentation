@@ -519,19 +519,28 @@ with tab_arch:
 
     with col_b:
         st.subheader("Hyperparameters")
-        st.table({
-            "Parameter": ["Hidden dim", "GNN layers", "LR", "Entropy coef", "PPO epochs",
-                          "Minibatch", "Num envs", "Training iters", "n_segments"],
-            "Value": ["64", "3", "3×10⁻⁴", "0.01", "4", "128", "16", "100", "64"],
-        })
+        st.markdown("""
+| Parameter | Value |
+|-----------|-------|
+| Hidden dim | 64 |
+| GNN layers | 3 |
+| LR | 3×10⁻⁴ |
+| Entropy coef | 0.01 |
+| PPO epochs | 4 |
+| Minibatch | 128 |
+| Num envs | 16 |
+| Training iters | 100 |
+| n_segments | 64 |
+""")
 
     st.subheader("Performance")
-    st.table({
-        "Metric": ["Val Dice", "Val IoU", "Oracle Dice"],
-        "Untrained policy": ["~0.196", "—", "—"],
-        "Trained (100 iters)": ["**0.947**", "**0.901**", "—"],
-        "Oracle ceiling": ["—", "—", "**0.958**"],
-    })
+    st.markdown("""
+| Metric | Untrained policy | Trained (100 iters) | Oracle ceiling |
+|--------|-----------------|---------------------|----------------|
+| Val Dice | ~0.196 | **0.947** | — |
+| Val IoU | — | **0.901** | — |
+| Oracle Dice | — | — | **0.958** |
+""")
 
 # ===========================================================================
 # TAB 4 — About
