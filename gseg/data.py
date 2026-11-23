@@ -97,12 +97,12 @@ def augment(img: np.ndarray, mask: np.ndarray, rng: np.random.Generator):
     return img, mask
 
 
-def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True, augment_fn=None, rng=None):
+def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True, augment_fn=None, rng=None, cnn_features=False):
     graphs = []
     for i, (img, mask) in enumerate(pairs):
         if augment_fn is not None and rng is not None:
             img, mask = augment_fn(img, mask, rng)
-        graphs.append(build_graph(img, mask, n_segments, compactness))
+        graphs.append(build_graph(img, mask, n_segments, compactness, cnn_features=cnn_features))
         if verbose and (i + 1) % 100 == 0:
             print(f"  built {i + 1}/{len(pairs)} graphs")
     return graphs
@@ -111,6 +111,7 @@ def build_graphs(pairs, n_segments=64, compactness=0.3, verbose=True, augment_fn
 def get_graphs(args):
     """Returns (train_graphs, val_graphs) according to the CLI args."""
     aug = getattr(args, "augment", False)
+    cnn = getattr(args, "cnn_features", False)
     if args.data == "synthetic":
         tr = make_synthetic(args.n_train, args.size, seed=args.seed)
         va = make_synthetic(args.n_val, args.size, seed=10_000 + args.seed)
@@ -125,6 +126,6 @@ def get_graphs(args):
     aug_rng = np.random.default_rng(args.seed + 1) if aug else None
     return (
         build_graphs(tr, args.n_segments, args.compactness,
-                     augment_fn=augment if aug else None, rng=aug_rng),
-        build_graphs(va, args.n_segments, args.compactness),  # val: no augmentation
+                     augment_fn=augment if aug else None, rng=aug_rng, cnn_features=cnn),
+        build_graphs(va, args.n_segments, args.compactness, cnn_features=cnn),
     )
