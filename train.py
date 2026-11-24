@@ -65,7 +65,14 @@ def main():
     train_g, val_g = get_graphs(args)
     print(f"oracle superpixel Dice (upper bound): train {oracle_dice(train_g):.3f} | val {oracle_dice(val_g):.3f}")
 
-    model = GraphActorCritic(NODE_FEAT_DIM + 3, args.hidden, args.layers).to(device)
+    in_dim = (NODE_FEAT_DIM_CNN if args.cnn_features else NODE_FEAT_DIM) + 3
+    model = GraphActorCritic(
+        in_dim, args.hidden, args.layers,
+        use_gat=args.use_gat, gat_heads=args.gat_heads,
+    ).to(device)
+    print(f"Model: {'GAT' if args.use_gat else 'GraphLayer'} × {args.layers} | "
+          f"hidden={args.hidden} | in_dim={in_dim} | "
+          f"params={sum(p.numel() for p in model.parameters()):,}")
 
     # ---- Transfer learning: warm-start from an existing checkpoint ----
     if args.pretrain is not None:
