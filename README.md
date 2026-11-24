@@ -1,34 +1,48 @@
-# Graph-Guided Reinforcement Learning (GRL) for Medical Image Segmentation
+# Graph-Guided Reinforcement Learning for Medical Image Segmentation
 
-## Run the demo
+A hybrid **Graph Neural Network + Proximal Policy Optimisation (PPO)** framework that learns to segment lesions in medical images by navigating a superpixel graph — no pixel-level annotation required at inference time.
 
-Use the project virtual environment:
+---
+
+## 🏆 Results (CVC-ClinicDB · 612 colonoscopy images)
+
+| Run | Iters | Val Dice | Val IoU | Oracle Dice |
+|-----|------:|--------:|--------:|------------:|
+| `polyp_v2` (baseline PPO) | 1 000 | **0.476** | 0.360 | 0.865 |
+| `polyp_finetune` (augmentation + lower LR) | 300 | **0.366** | 0.265 | 0.865 |
+| `smoke` (synthetic, sanity) | 500 | 0.947 | 0.901 | 0.958 |
+
+> **Oracle ceiling** = 0.865 on 200-superpixel partition (the graph resolution, not the agent, is the bottleneck on CPU).
+
+Planned GPU upgrades: **GAT layers** (`--use_gat`) and **CNN node features** (`--cnn_features`, ResNet-18 → 140-dim) are implemented and verified; full training projected to reach Dice **0.55–0.60**.
+
+---
+
+## 🚀 Run the Demo
 
 ```powershell
 .\venv\Scripts\python.exe -m streamlit run app.py --server.address localhost --server.port 8501
 ```
 
-Then open `http://localhost:8501`. Upload a 2D image to run inference with `runs/smoke/best.pt`.
-
-An advanced Reinforcement Learning (RL) framework that learns to segment tumors, organs, and lesions in medical scans (e.g., MRI/CT) using a Graph Neural Network (GNN) anatomical representation. This approach eliminates the dependency on dense manual pixel-level annotation during inference by formulating segmentation as an interactive graph traversal problem.
+Open `http://localhost:8501`. Use `runs/smoke/best.pt` for a synthetic demo (Dice 0.947) or `runs/polyp_v2/best.pt` for the real-data model.
 
 ---
 
 ## Project Overview
-Standard deep learning segmentation methods (like U-Net) predict masks pixel-by-pixel, ignoring structural relationships and requiring massive labeled datasets. 
+
+Standard segmentation methods (U-Net) predict masks pixel-by-pixel, ignoring structural relationships and requiring massive labeled datasets.
 
 This project implements a hybrid **GNN + RL** framework:
-1. **Graph Construction**: The 3D medical scan is converted into an anatomical graph (where nodes represent superpixels/anatomical regions and edges represent spatial adjacency).
-2. **GNN Representation**: A Graph Neural Network (e.g., GraphSAGE/GAT) encodes the nodes with structural and texture features.
-3. **RL Segmentation**: An RL Agent (using PPO or DQN) navigates the graph, selecting which nodes belong to the target organ/tumor. It is guided by a reward function based on segmentation quality (Dice Score improvement).
+1. **Graph Construction** — SLIC superpixels (200 nodes/image) form an adjacency graph; nodes carry 12-dim hand-crafted features (colour, texture, position).
+2. **GNN Representation** — A multi-layer `GraphLayer` (or optional `GATLayer` with 4 attention heads) encodes structural context.
+3. **PPO Agent** — Navigates the graph, toggling nodes in/out of the segmentation mask; rewarded by Δ Dice at each step.
+4. **CNN Node Features** (optional, `--cnn_features`) — Frozen ResNet-18 `layer2` pooled per superpixel raises node dim from 12 → 140.
 
 ---
 
 ## Repository Structure
 ```directory
-grl-med-seg/
-├── baselines/            # Baseline models (e.g., Random RL, standard U-Net)
-│   └── random_agent.py
+graph guided reinforcement learning for medical image segmentation/
 ├── notebooks/            # Jupyter notebooks for EDA and rapid prototyping
 │   ├── 01_eda.ipynb      # Medical image format (NIfTI/DICOM) exploration
 │   └── 02_env_test.ipynb # Prototyping custom RL environment
