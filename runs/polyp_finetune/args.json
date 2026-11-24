@@ -14,11 +14,14 @@
   "lr": 5e-05,
   "epochs": 4,
   "minibatch": 128,
-  "ent_coef": 0.02,
+  "ent_coef": 0.01,
   "eval_every": 20,
   "seed": 0,
   "device": "auto",
   "out": "runs/polyp_finetune",
-  "pretrain": "runs/polyp_v2/best.pt",
-  "augment": true
+  "pretrain": null,
+  "augment": false,
+  "use_gat": false,
+  "gat_heads": 4,
+  "cnn_features": false
 }
