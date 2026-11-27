@@ -35,8 +35,13 @@ def main():
     out = os.path.dirname(a.ckpt)
 
     _, val_g = get_graphs(args)
-    model = GraphActorCritic(NODE_FEAT_DIM + 3, args.hidden, args.layers).to(device)
-    model.load_state_dict(ck["model"])
+    use_gat = getattr(args, "use_gat", False)
+    gat_heads = getattr(args, "gat_heads", 4)
+    cnn = getattr(args, "cnn_features", False)
+    in_dim = (140 if cnn else NODE_FEAT_DIM) + 3
+    model = GraphActorCritic(in_dim, args.hidden, args.layers, use_gat=use_gat, gat_heads=gat_heads).to(device)
+    sd = {k.replace("layers.", "gnn_layers.", 1) if k.startswith("layers.") else k: v for k, v in ck["model"].items()}
+    model.load_state_dict(sd)
 
     r = evaluate_policy(model, val_g, device, return_labels=True)
     metrics = dict(val_dice=r["dice"], val_iou=r["iou"], oracle_dice=oracle_dice(val_g), n_val=len(val_g))
