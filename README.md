@@ -4,17 +4,27 @@ A hybrid **Graph Neural Network + Proximal Policy Optimisation (PPO)** framework
 
 ---
 
-## 🏆 Results (CVC-ClinicDB · 612 colonoscopy images)
+## 🏆 Results
+
+### CVC-ClinicDB (612 colonoscopy images · 490 train / 122 val · `seed=0`, no held-out test set)
+
+| Method / Run | Iters | Val Dice | Val IoU | HD95 (px) | Oracle Dice |
+|--------------|------:|---------:|--------:|----------:|------------:|
+| Otsu thresholding (grayscale, oracle class) | — | 0.257 | 0.163 | 53.3 | — |
+| K-Means (`k=2`, CIE-Lab, oracle class) | — | 0.252 | 0.160 | 53.8 | — |
+| `polyp_finetune` (augmentation + lower LR) | 300 | 0.366 | 0.265 | — | 0.865 |
+| **`polyp_v2` (GRL-PPO, best checkpoint)** | 1 000 | **0.476** | **0.360** | — | 0.865 |
+
+### Synthetic Lesion Benchmark (200 train / 40 val)
 
 | Run | Iters | Val Dice | Val IoU | Oracle Dice |
-|-----|------:|--------:|--------:|------------:|
-| `polyp_v2` (baseline PPO) | 1 000 | **0.476** | 0.360 | 0.865 |
-| `polyp_finetune` (augmentation + lower LR) | 300 | **0.366** | 0.265 | 0.865 |
-| `smoke` (synthetic, sanity) | 500 | 0.947 | 0.901 | 0.958 |
+|-----|------:|---------:|--------:|------------:|
+| `smoke` (single run) | 100 | **0.947** | **0.901** | 0.958 |
+| 3-seed ablation (full guided model) | 100 | 0.925 ± 0.016 | — | ≈ 0.96 |
 
-> **Oracle ceiling** = 0.865 on 200-superpixel partition (the graph resolution, not the agent, is the bottleneck on CPU).
+> **Oracle ceiling** = `0.865` on the 200-superpixel CVC-ClinicDB partition (a property of the SLIC graph resolution, independent of hardware). Real-data training ran on CPU (~9.6 h for 1000 iters).
 
-Planned GPU upgrades: **GAT layers** (`--use_gat`) and **CNN node features** (`--cnn_features`, ResNet-18 → 140-dim) are implemented and verified; full training projected to reach Dice **0.55–0.60**.
+**Future work (implemented, not yet trained on real data):** **GAT layers** (`--use_gat`) and **CNN node features** (`--cnn_features`, frozen ResNet-18 → 140-dim) are implemented and verified on synthetic data; full GPU evaluation on CVC-ClinicDB is deferred to future work.
 
 ---
 
